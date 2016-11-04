@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+
+const download = require("download-git-repo");
+const program = require("commander");
+const ora = require("ora");
+const os = require("os");
+const uid = require("uid");
+const rm = require('rimraf').sync;
+const exists = require("fs").existsSync;
+const path = require("path");
+const inquirer = require("inquirer");
+
+const logger = require("../lib/logger")('pomjs-cli');
+const checkVersion = require("../lib/check-version");
+
+program
+	.option('-c, --clone', 'use git clone')
+	.parse(process.argv);
+
+process.on('exit', console.log)
+
+const distName = program.args[0];
+const inDistFolder = !distName || distName === ".";
+const distPath = path.resolve(distName || ".");
+
+if (exists(distPath)) {
+	inquirer.prompt([{
+		type: "confirm",
+		message: inDistFolder ? "Generate project in current directory?" : "Target directory exists. Continue?",
+		name: 'ok'
+	}]).then(answer => {
+		if (answer.ok) run();
+	})
+} else {
+	run();
+}
+
+function run() {
+	return checkVersion()
+		.then(downloadAndGenerate)
+		.catch(reason => logger.fatal(reason));
+}
+
+function downloadAndGenerate() {
+	const tmp = os.tmpdir() + "/pomjs-template-" + uid();
+	const spinner = ora("downloading project template").start();
+
+	download("quancheng-ec/pomjs", tmp, {
+		clone: program.clone
+	}, (err) => {
+		spinner.stop();
+		process.on('exit', () => {
+			rm(tmp)
+		})
+		if (err) logger.fatal("Failed to download repo: " + err.message.trim());
+		logger.success("downloaded")
+	})
+}

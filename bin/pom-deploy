@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+const logger = require("../lib/logger")('pomjs-cli')
+
+logger.success("Sorry! This feature is still WIP");

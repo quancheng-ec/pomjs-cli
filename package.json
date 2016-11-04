@@ -1,0 +1,38 @@
+{
+  "name": "pom-cli",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "author": "zephyr",
+  "description": "Simple CLI for scaffolding PomJS projects",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quancheng-ec/pomjs-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "pomjs"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/quancheng-ec/pomjs-cli/issues"
+  },
+  "homepage": "https://github.com/quancheng-ec/pomjs-cli#readme",
+  "bin": {
+    "pom": "bin/pom",
+    "pom-init": "bin/pom-init",
+    "pom-deploy": "bin/pom-deploy"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "download-git-repo": "^0.2.1",
+    "inquirer": "^1.2.2",
+    "ora": "^0.3.0",
+    "rimraf": "^2.5.4",
+    "uid": "^0.0.2"
+  },
+  "engines":{
+    "node": "5.0.0"
+  }
+}

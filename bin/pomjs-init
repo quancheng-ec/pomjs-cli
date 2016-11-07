@@ -10,14 +10,25 @@ const exists = require("fs").existsSync;
 const path = require("path");
 const inquirer = require("inquirer");
 
-const logger = require("../lib/logger")('pomjs-cli');
+const logger = require("../lib/logger")("pomjs-cli");
 const checkVersion = require("../lib/check-version");
 
 program
-	.option('-c, --clone', 'use git clone')
-	.parse(process.argv);
+	.usage("[project-name]")
+	.option("-c, --clone", "use git clone");
 
-process.on('exit', console.log)
+process.on("exit", () => {
+	console.log()
+});
+
+program.on('--help', function() {
+	console.log("  Examples:");
+	console.log("");
+	console.log("    $ pomjs init my-pomjs-project");
+	console.log("");
+});
+
+program.parse(process.argv);
 
 const distName = program.args[0];
 const inDistFolder = !distName || distName === ".";
@@ -27,7 +38,7 @@ if (exists(distPath)) {
 	inquirer.prompt([{
 		type: "confirm",
 		message: inDistFolder ? "Generate project in current directory?" : "Target directory exists. Continue?",
-		name: 'ok'
+		name: "ok"
 	}]).then(answer => {
 		if (answer.ok) run();
 	})
@@ -36,23 +47,33 @@ if (exists(distPath)) {
 }
 
 function run() {
-	return checkVersion()
-		.then(downloadAndGenerate)
-		.catch(reason => logger.fatal(reason));
+	return askTemplate().then(answer => {
+		return checkVersion()
+			.then(() => {
+				downloadAndGenerate(answer.choice)
+			})
+			.catch(reason => logger.fatal(reason));
+	})
 }
 
-function downloadAndGenerate() {
-	const tmp = os.tmpdir() + "/pomjs-template-" + uid();
+function askTemplate() {
+	return inquirer.prompt([{
+		type: "list",
+		message: "Choose a template to download",
+		name: "choice",
+		choices: ["pomjs-example"],
+		default: "pomjs-example"
+	}])
+}
+
+function downloadAndGenerate(templateName) {
 	const spinner = ora("downloading project template").start();
 
-	download("quancheng-ec/pomjs", tmp, {
+	download("quancheng-ec/" + templateName, distPath, {
 		clone: program.clone
 	}, (err) => {
 		spinner.stop();
-		process.on('exit', () => {
-			rm(tmp)
-		})
 		if (err) logger.fatal("Failed to download repo: " + err.message.trim());
-		logger.success("downloaded")
+		logger.success("Your Project has been created.")
 	})
 }

@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/quancheng-ec/pomjs-cli#readme",
   "bin": {
-    "pom": "bin/pom",
-    "pom-init": "bin/pom-init",
-    "pom-deploy": "bin/pom-deploy"
+    "pomjs": "bin/pomjs",
+    "pomjs-init": "bin/pomjs-init",
+    "pomjs-deploy": "bin/pomjs-deploy"
   },
   "dependencies": {
     "chalk": "^1.1.3",

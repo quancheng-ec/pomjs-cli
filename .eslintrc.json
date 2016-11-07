@@ -1,0 +1,15 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "extends": "standard",
+  "rules": {
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "arrow-parens": [2, "as-needed"]
+  }
+}

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const program = require("commander");
-const pkg = require("../package.json");
+const program = require('commander')
+const pkg = require('../package.json')
 
 program
-	.version(pkg.version)
-	.usage("<command> [options]")
-	.command("init", "generate a pomjs project")
-	.command("deploy", "deploy your project")
-	.parse(process.argv);
+  .version(pkg.version)
+  .usage('<command> [options]')
+  .command('init', 'generate a pomjs project')
+  .command('deploy', 'deploy your project')
+  .parse(process.argv)
